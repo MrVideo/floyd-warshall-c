@@ -27,9 +27,6 @@ int main()
 	printf("\nEnter the filename containing the matrix: ");
 	scanf("%s", filename);
 
-	if (strlen(filename) == 0)
-		strcpy(filename, DEFAULT_FILE_NAME);
-
 	distances = read_matrix_from_file(filename, node_num);
 	if (distances == NULL) {
 		printf("\nUnable to initialise the distance matrix. Exiting.");
