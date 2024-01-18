@@ -1,20 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>
 
 #define INFINITY 1000
 #define INFINITY_STRING "inf"
 #define INFINITY_STRING_TERMINATED "inf\n"
 #define DELIMITER " "
-#define DEFAULT_FILE_NAME "input.txt"
 
 void print_matrix(int **matrix, int dimensions);
 int **init_matrix(int dimensions);
-void enter_distances(int **matrix, int dimensions);
 void floyd_warshall_algorithm(int **distances, int **predecessors, int dimensions);
-int negative_cost_check(int **distances, int dimensions);
-void normalize_matrix(int **matrix, int dimensions);
 int **read_matrix_from_file(char *filename, int dimensions);
 
 int main()
@@ -90,25 +85,6 @@ int **init_matrix(int dimensions)
 	return matrix;
 }
 
-void enter_distances(int **matrix, int dimensions)
-{
-	char input[100];
-
-	for (int i = 0; i < dimensions; i++) {
-		for (int j = 0; j < dimensions; j++) {
-			printf("Distance between nodes %d and %d: ", i, j);
-			scanf("%s", input);
-
-			if (!strcmp(input, "inf")) {
-				matrix[i][j] = INFINITY;
-			} else {
-				matrix[i][j] = strtod(input, NULL);
-			}
-		}
-		printf("\n");
-	}
-}
-
 void floyd_warshall_algorithm(int **distances, int **predecessors, int dimensions)
 {
 	for (int u = 0; u < dimensions; u++) {
@@ -145,22 +121,9 @@ void floyd_warshall_algorithm(int **distances, int **predecessors, int dimension
 	}
 }
 
-int negative_cost_check(int **distances, int dimensions) {
-	for (int i = 0; i < dimensions; i++) {
-		if (distances[i][i] < 0)
-			return 1;
 	}
 
 	return 0;
-}
-
-void normalize_matrix(int **matrix, int dimensions) {
-	for (int i = 0; i < dimensions; i++) {
-		for (int j = 0; j < dimensions; j++) {
-			if (matrix[i][j] <= -INT_MAX / 4 || matrix[i][j] >= INT_MAX / 4)
-				matrix[i][j] = INT_MAX;
-		}
-	}
 }
 
 int **read_matrix_from_file(char *filename, int dimensions) {
