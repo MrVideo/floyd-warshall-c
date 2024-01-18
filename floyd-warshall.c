@@ -46,17 +46,7 @@ int main()
 
 	predecessors = init_matrix(node_num);
 	
-
 	floyd_warshall_algorithm(distances, predecessors, node_num);
-	// normalize_matrix(distances, node_num);
-	
-	/*
-	if (negative_cost_check(distances, node_num) == 1) {
-		printf("Negative cost circuit found!\n");
-	} else {
-		printf("No negative cost circuit found.\n");
-	}
-	*/
 
 	printf("The final distance matrix is:\n");
 	print_matrix(distances, node_num);
