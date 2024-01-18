@@ -4,6 +4,10 @@
 #include <limits.h>
 
 #define INFINITY 1000
+#define INFINITY_STRING "inf"
+#define INFINITY_STRING_TERMINATED "inf\n"
+#define DELIMITER " "
+#define DEFAULT_FILE_NAME "input.txt"
 
 void print_matrix(int **matrix, int dimensions);
 int **init_matrix(int dimensions);
@@ -11,6 +15,7 @@ void enter_distances(int **matrix, int dimensions);
 void floyd_warshall_algorithm(int **distances, int **predecessors, int dimensions);
 int negative_cost_check(int **distances, int dimensions);
 void normalize_matrix(int **matrix, int dimensions);
+int **read_matrix_from_file(char *filename, int dimensions);
 
 int main()
 {
@@ -23,12 +28,24 @@ int main()
 	printf("Enter the number of nodes in the graph you want to analyse: ");
 	scanf("%d", &node_num);
 
-	distances = init_matrix(node_num);
+	char filename[100];
+	printf("\nEnter the filename containing the matrix: ");
+	scanf("%s", filename);
+
+	if (strlen(filename) == 0)
+		strcpy(filename, DEFAULT_FILE_NAME);
+
+	distances = read_matrix_from_file(filename, node_num);
+	if (distances == NULL) {
+		printf("\nUnable to initialise the distance matrix. Exiting.");
+		return 1;
+	}
+
+	printf("\nEntered matrix:\n");
+	print_matrix(distances, node_num);
+
 	predecessors = init_matrix(node_num);
 	
-	printf("Enter the distances between all nodes below:\n");
-	enter_distances(distances, node_num);
-	// print_matrix(distances, node_num);
 
 	floyd_warshall_algorithm(distances, predecessors, node_num);
 	// normalize_matrix(distances, node_num);
@@ -152,4 +169,41 @@ void normalize_matrix(int **matrix, int dimensions) {
 				matrix[i][j] = INT_MAX;
 		}
 	}
+}
+
+int **read_matrix_from_file(char *filename, int dimensions) {
+	FILE *file = fopen(filename, "r");
+	char buffer[100];
+	char *token;
+
+	int read_int[dimensions * dimensions];
+
+	int i = 0;
+
+	while (fgets(buffer, sizeof(buffer), file)) {
+		token = strtok(buffer, DELIMITER);
+
+		while (token != NULL) {
+			if (!strcmp(token, INFINITY_STRING) || !strcmp(token, INFINITY_STRING_TERMINATED)) {
+				read_int[i] = INFINITY;
+			} else {
+				read_int[i] = strtol(token, NULL, 10);
+			}
+			
+			i++;
+			token = strtok(NULL, DELIMITER);
+		}
+	}
+
+	int **matrix = (int**) malloc(sizeof(int*) * dimensions);
+	for (int k = 0; k < dimensions; k++)
+		matrix[k] = (int*) malloc(sizeof(int) * dimensions);
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			matrix[i][j] = read_int[4 * i + j];
+		}
+	}
+
+	return matrix;
 }
