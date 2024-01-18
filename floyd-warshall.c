@@ -122,6 +122,8 @@ void floyd_warshall_algorithm(int **distances, int **predecessors, int dimension
 						printf("\tYes");
 						distances[i][j] = distances[i][u] + distances[u][j];
 						predecessors[i][j] = u;
+						printf("\n");
+						print_matrix(predecessors, dimensions);
 					}
 				}
 			}
