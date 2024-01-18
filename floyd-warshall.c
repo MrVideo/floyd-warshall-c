@@ -141,9 +141,9 @@ int **read_matrix_from_file(char *filename, int dimensions) {
 	for (int k = 0; k < dimensions; k++)
 		matrix[k] = (int*) malloc(sizeof(int) * dimensions);
 
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
-			matrix[i][j] = read_int[4 * i + j];
+	for (int i = 0; i < dimensions; i++) {
+		for (int j = 0; j < dimensions; j++) {
+			matrix[i][j] = read_int[dimensions * i + j];
 		}
 	}
 
