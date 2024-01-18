@@ -118,7 +118,7 @@ void floyd_warshall_algorithm(int **distances, int **predecessors, int dimension
 				if (i != u && j != u) {
 						printf("\nd[%d][%d] + d[%d][%d] < d[%d][%d]?", i, u, u, j, i, j);
 						printf("\n%d + %d < %d", distances[i][u], distances[u][j], distances[i][j]);
-					if (distances[i][u] + distances[u][j] < distances[i][j]) {
+					if (distances[i][u] + distances[u][j] < distances[i][j] && distances[i][u] != INFINITY && distances[u][j] != INFINITY) {
 						printf("\tYes");
 						distances[i][j] = distances[i][u] + distances[u][j];
 						predecessors[i][j] = u;
