@@ -9,7 +9,7 @@
 
 void print_matrix(int **matrix, int dimensions);
 int **init_matrix(int dimensions);
-void floyd_warshall_algorithm(int **distances, int **predecessors, int dimensions);
+int floyd_warshall_algorithm(int **distances, int **predecessors, int dimensions);
 int **read_matrix_from_file(char *filename, int dimensions);
 
 int main()
@@ -41,13 +41,19 @@ int main()
 
 	predecessors = init_matrix(node_num);
 	
-	floyd_warshall_algorithm(distances, predecessors, node_num);
+	int result = floyd_warshall_algorithm(distances, predecessors, node_num);
+
+	if (result) {
+		printf("\nA negative cost circuit was found: computation halted.");
+	}
 
 	printf("\nThe final distance matrix is:\n");
 	print_matrix(distances, node_num);
 
-	printf("\nThe final predecessor matrix is:\n");
-	print_matrix(predecessors, node_num);
+	if (!result) {
+		printf("\nThe final predecessor matrix is:\n");
+		print_matrix(predecessors, node_num);
+	}
 
 	return 0;
 }
@@ -85,42 +91,26 @@ int **init_matrix(int dimensions)
 	return matrix;
 }
 
-void floyd_warshall_algorithm(int **distances, int **predecessors, int dimensions)
+int floyd_warshall_algorithm(int **distances, int **predecessors, int dimensions)
 {
 	for (int u = 0; u < dimensions; u++) {
-		printf("\nTriangulation on node %d", u);
 		for (int i = 0; i < dimensions; i++) {
 			for (int j = 0; j < dimensions; j++) {
 				if (i != u && j != u) {
-						printf("\nd[%d][%d] + d[%d][%d] < d[%d][%d]?", i, u, u, j, i, j);
-						printf("\n%d + %d < %d", distances[i][u], distances[u][j], distances[i][j]);
 					if (distances[i][u] + distances[u][j] < distances[i][j] && distances[i][u] != INFINITY && distances[u][j] != INFINITY) {
-						printf("\tYes");
 						distances[i][j] = distances[i][u] + distances[u][j];
+
 						predecessors[i][j] = u;
-						printf("\n");
-						print_matrix(predecessors, dimensions);
 					}
 				}
 			}
 		}
 
-		printf("\n");
 		for (int k = 0; k < dimensions; k++) {
 			if (distances[k][k] < 0) {
-				printf("\nNegative cost circuit found! Halting.\n");
-				return;
+				return 1;
 			}
 		}
-		/*
-		if (distances[i][i] < 0) {
-			printf("\nNegative cost circuit found! Halting.\n");
-			return;
-		}
-		*/
-	}
-}
-
 	}
 
 	return 0;
