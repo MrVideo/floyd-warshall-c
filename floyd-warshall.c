@@ -48,10 +48,10 @@ int main()
 	
 	floyd_warshall_algorithm(distances, predecessors, node_num);
 
-	printf("The final distance matrix is:\n");
+	printf("\nThe final distance matrix is:\n");
 	print_matrix(distances, node_num);
 
-	printf("The final predecessor matrix is:\n");
+	printf("\nThe final predecessor matrix is:\n");
 	print_matrix(predecessors, node_num);
 
 	return 0;
