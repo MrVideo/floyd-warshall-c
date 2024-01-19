@@ -6,3 +6,6 @@
 
 # Binaries
 *.out
+
+# clang-format config
+.clang-format
