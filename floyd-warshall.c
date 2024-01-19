@@ -170,6 +170,8 @@ int **read_matrix_from_file(char *filename, int dimensions) {
 		}
 	}
 
+	fclose(file);
+
 	int **matrix = (int**) malloc(sizeof(int*) * dimensions);
 	for (int k = 0; k < dimensions; k++)
 		matrix[k] = (int*) malloc(sizeof(int) * dimensions);
