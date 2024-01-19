@@ -6,6 +6,7 @@
 #define INFINITY_STRING "inf"
 #define INFINITY_STRING_TERMINATED "inf\n"
 #define DELIMITER " "
+#define BUF_SIZE 1024
 
 void print_matrix(int **matrix, int dimensions);
 int **init_matrix(int dimensions);
@@ -21,13 +22,16 @@ int main(int argc, char *argv[])
 	int	**predecessors;		// Matrix that stores the predecessor to j in the path from node i to node j
 	int node_num = 0;		// The number of nodes in the graph
 
-	char filename[100];		// String containing input file name
+	char filename[BUF_SIZE];		// String containing input file name
 
 	if (argc == 1) { // Interactive mode
 		printf("Enter the filename containing the matrix: ");
-		scanf("%s", filename);
-
-		node_num = count_matrix_dimensions_from_file(filename);
+		if (fgets(filename, BUF_SIZE, stdin) != NULL)
+			node_num = count_matrix_dimensions_from_file(filename);
+		else {
+			printf("Unable to read filename.\n");
+			return 1;
+		}
 
 		if (node_num == -1) {
 			printf("\nThere was an error while reading from file.\n");
